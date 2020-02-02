@@ -1,0 +1,2 @@
+1-Create row object from excel file
+2-Separete each product from doc file 
