@@ -1,6 +1,6 @@
 import textract
 
 
-def readDocx(path):
+def readDoc(path):
     text = textract.process(path)
     print(type(text))

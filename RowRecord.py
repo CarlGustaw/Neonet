@@ -11,10 +11,5 @@ class RowRecord:
         self.faktura = faktura
 
     def showRowObject(self):
-        print("Id")
-        print(self.id)
-        print("Nazwa")
-        print(self.nazwa)
-        print("Faktura")
-        print(self.faktura)
+        print("Id", self.id, " ", "Nazwa", self.nazwa, " ", "Faktura", self.faktura)
 
