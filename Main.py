@@ -1,5 +1,5 @@
 import DocReader
-from ScopeForRows import RowMaker
+from RowToObjects import RowMaker
 
 EXCELPATHNAME = "D:/Poligon_Python/TestExcelFile.xlsx"
 DOCXPATHNAME = "D:/Poligon_Python/Faktura-VAT.docx"
