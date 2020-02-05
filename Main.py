@@ -1,12 +1,13 @@
 import DocReader
-from ScopeForRows import RowMaker
+from RowToObjects import RowMaker
 
-EXCELPATHNAME = "D:/Poligon_Python/TestExcelFile.xlsx"
-DOCXPATHNAME = "D:/Poligon_Python/Faktura-VAT.docx"
+EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
+#DOCXPATHNAME = "D:/Poligon_Python/Faktura-VAT.docx"
 
-DocReader.readDoc(DOCXPATHNAME)
+#DocReader.readDoc(DOCXPATHNAME)
 
-p1 = RowMaker.readExcelFileToSheetAndMakingObject(EXCELPATHNAME)
-p1[0].showRowObject()
+rowObjects = RowMaker.readExcelFileToSheetAndMakingObject(EXCELPATHNAME)
+rowObjects[0].showRowObject()
+rowObjects[6].showRowObject()
 
 

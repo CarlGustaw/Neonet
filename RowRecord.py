@@ -1,15 +1,12 @@
 class RowRecord:
-    id = ""
+    idDKF = ""
     nazwa = ""
-    faktura = ""
     winType = ""
     officeType = ""
 
-    def __init__(self, id, nazwa, faktura):
-        self.id = id
+    def __init__(self, nazwa, idDKF):
         self.nazwa = nazwa
-        self.faktura = faktura
+        self.idDKF = idDKF
 
     def showRowObject(self):
-        print("Id", self.id, " ", "Nazwa", self.nazwa, " ", "Faktura", self.faktura)
-
+        print("Nazwa", self.nazwa, " ", "ID-DKF", self.idDKF)
