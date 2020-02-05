@@ -1,4 +1,5 @@
 import ExcelPathsGetter
+from SearchEngineExcel import SearchEngineExcel
 from RowToObjects import RowMaker
 
 MAINEXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
@@ -10,7 +11,5 @@ rowObjects[6].showRowObject()
 print("Number of rows with bad DKF:  ", len(rowsWithBadDKF))
 
 print("All files in dir:    ", ExcelPathsGetter.excelPaths)
-
-
-
-
+print()
+SearchEngineExcel.ScanFileForPatterns(EXCELPATHNAME)
