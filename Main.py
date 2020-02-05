@@ -1,13 +1,16 @@
-import DocReader
+import ExcelPathsGetter
 from RowToObjects import RowMaker
 
-EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
-#DOCXPATHNAME = "D:/Poligon_Python/Faktura-VAT.docx"
+MAINEXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
+EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/90408.xls"
 
-#DocReader.readDoc(DOCXPATHNAME)
-rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(EXCELPATHNAME)
+rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(MAINEXCELPATHNAME)
 rowObjects[0].showRowObject()
 rowObjects[6].showRowObject()
 print("Number of rows with bad DKF:  ", len(rowsWithBadDKF))
+
+print("All files in dir:    ", ExcelPathsGetter.excelPaths)
+
+
 
 

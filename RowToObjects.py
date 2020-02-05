@@ -6,9 +6,9 @@ class RowMaker:
     dataSheet = ""
 
     @staticmethod
-    def readExcelFileToSheetAndMakingObject(excelPathName):
-        dataSheet = ExcelReader.readExcelFile(excelPathName)
-        print("Excel read successfully")
+    def readExcelFileToSheetAndMakingObject(mainExcelPathName):
+        dataSheet = ExcelReader.readExcelFile(mainExcelPathName)
+        print("Main excel read successfully")
         listOfObjects = []
         rowsWithBadDKF = []
 
@@ -25,4 +25,5 @@ class RowMaker:
                 listOfObjects.append(RowRecord(dataSheet.row_slice(rowNumber)[3], dataSheet.row_slice(rowNumber)[8]))
 
         print("Rows as objects add successfully", " Number of readed rows: ", dataSheet.nrows - 1)
+        print()
         return listOfObjects, rowsWithBadDKF
