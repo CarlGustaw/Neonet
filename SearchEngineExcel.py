@@ -21,7 +21,4 @@ class SearchEngineExcel:
                     winVersion = cell.value[str(cell.value).find('W8'):str(cell.value).find('W8') + 30]
                 if str(cell.value).find('W10') != -1:
                     winVersion = cell.value[str(cell.value).find('W10'):str(cell.value).find('W10') + 30]
-
-        print("Office: ", officeVersion)
-        print("Win: ", winVersion)
         return winVersion, officeVersion

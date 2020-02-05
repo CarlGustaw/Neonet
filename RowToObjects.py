@@ -22,7 +22,7 @@ class RowMaker:
                     dataSheet.row_slice(rowNumber)[8].value == "ID:379199":
                 rowsWithBadDKF.append(rowNumber)
             else:
-                listOfObjects.append(RowRecord(dataSheet.row_slice(rowNumber)[3], dataSheet.row_slice(rowNumber)[8]))
+                listOfObjects.append(RowRecord(dataSheet.row_slice(rowNumber)[3], dataSheet.row_slice(rowNumber)[8].value))
 
         print("Rows as objects add successfully", " Number of readed rows: ", dataSheet.nrows - 1)
         print()

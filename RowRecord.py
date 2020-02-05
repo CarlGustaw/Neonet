@@ -9,4 +9,7 @@ class RowRecord:
         self.idDKF = idDKF
 
     def showRowObject(self):
-        print("Nazwa", self.name, " ", "ID-DKF", self.idDKF)
+        print("Nazwa", self.name, " ", "ID-DKF: ", self.idDKF)
+
+    def getID_DKF(self):
+        return self.idDKF
