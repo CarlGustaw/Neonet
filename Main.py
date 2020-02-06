@@ -1,12 +1,24 @@
-import DocReader
 from RowToObjects import RowMaker
+from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVersion
+import ExcelPathsGetter
+from Xlsxwriter import ExcelWriter
 
-EXCELPATHNAME = "D:/Poligon_Python/TestExcelFile.xlsx"
-DOCXPATHNAME = "D:/Poligon_Python/Faktura-VAT.docx"
+MAINEXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
+EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/90408.xls"
 
-DocReader.readDoc(DOCXPATHNAME)
+rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(MAINEXCELPATHNAME)
+rowObjects[0].showRowObject()
+rowObjects[6].showRowObject()
+print("Number of rows with bad DKF:  ", len(rowsWithBadDKF))
+print()
+print("Detect paths: ", ExcelPathsGetter.excelPaths)
 
-p1 = RowMaker.readExcelFileToSheetAndMakingObject(EXCELPATHNAME)
-p1[0].showRowObject()
-
+finalList = ListWithDKF_winVersion_officeVersion(MAINEXCELPATHNAME)
+finalList.makeList("90408")
+print("Row from final list: ", finalList.ListDKF_WIN_OFFICE[0])
+print("DKF:  ", finalList.ListDKF_WIN_OFFICE[0][0])
+print("Win:  ", finalList.ListDKF_WIN_OFFICE[0][1])
+print("Office:  ", finalList.ListDKF_WIN_OFFICE[0][2])
+ToExcel = ExcelWriter()
+ToExcel.makeExcel(finalList.ListDKF_WIN_OFFICE[0])
 
