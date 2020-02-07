@@ -15,6 +15,8 @@ class SearchEngineExcel:
         "W10P": "Windows 10 Pro"
     }
 
+    ERRORMESSAGE = "Nie udalo sie odczytac wersji"
+
     def __init__(self, excelPathName):
         self.excelPathName = excelPathName
         self.dataSheet = ExcelReader.readExcelFile(self.excelPathName)
@@ -24,9 +26,13 @@ class SearchEngineExcel:
 
         for rowNumber in range(0, self.dataSheet.nrows - 1):
             for cell in self.dataSheet.row_slice(rowNumber):
+                # Searching for office version
                 if str(cell.value).find('Office') != -1:
                     self.officeVersion = cell.value[str(cell.value).find("Office"):str(cell.value).find("Office") + 30]
-                if str(cell.value).find('Windows') != -1 or str(cell.value).find('Win') != -1 or str(cell.value).find('W') != -1:
+
+                # Searching for windows version
+                if str(cell.value).find('Windows') != -1 or str(cell.value).find('Win') != -1 or str(cell.value).find(
+                        'W') != -1:
                     if str(cell.value).find('W7') != -1 or str(cell.value).find('Win7') != -1 or str(cell.value).find(
                             'Windows 7') != -1:
                         if str(cell.value).find('W7P') != -1 or str(cell.value).find('Pro') != -1:
@@ -38,9 +44,18 @@ class SearchEngineExcel:
                             self.winVersion = self.winDict.get("W8P")
                         else:
                             self.winVersion = self.winDict.get("W8")
-                    if str(cell.value).find('Windows 10') != -1 or str(cell.value).find('W10') != -1 or str(cell.value).find('Win10') != -1:
-                        if str(cell.value).find('Windows 10 Pro') != -1 or str(cell.value).find('Pro') != -1 or str(cell.value).find("W10P") != -1:
+                    if str(cell.value).find('Windows 10') != -1 or str(cell.value).find('W10') != -1 or str(
+                            cell.value).find('Win10') != -1:
+                        if str(cell.value).find('Windows 10 Pro') != -1 or str(cell.value).find('Pro') != -1 or str(
+                                cell.value).find("W10P") != -1:
                             self.winVersion = self.winDict.get("W10P")
                         else:
                             self.winVersion = self.winDict.get("W10")
+
+        # If no version was found error message is written
+        if self.winVersion == "":
+            self.winVersion = self.ERRORMESSAGE
+        if self.officeVersion == "":
+            self.officeVersion = self.ERRORMESSAGE
+
         return self.winVersion, self.officeVersion
