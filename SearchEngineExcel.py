@@ -34,6 +34,7 @@ class SearchEngineExcel:
             for cell in self.dataSheet.row_slice(rowNumber):
                 # Searching for office version
                 if str(cell.value).find('Office') != -1:
+                    print("Office found")
                     if str(cell.value).find('2007') != -1:
                         self.officeVersion = self.officeDict.get("O_2007")
                     elif str(cell.value).find('2010') != -1:
