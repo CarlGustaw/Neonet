@@ -1,15 +1,23 @@
+from RowToObjects import RowMaker
 from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVersion
 from Xlsxwriter import ExcelWriter
 
 MAINEXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
 EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/90408.xls"
+DIRWITHPDFCHANGEDTOEXCEL = "//kmsrv01/OCR/EXCEL/OUTPUT/*.xls"
 
-dataForExcelWriter = ListWithDKF_winVersion_officeVersion(MAINEXCELPATHNAME)
-print("Row from dataForExcelWriter: ", dataForExcelWriter.ListDKF_WIN_OFFICE[0])
-print("DKF:  ", dataForExcelWriter.ListDKF_WIN_OFFICE[0][0])
-print("Win:  ", dataForExcelWriter.ListDKF_WIN_OFFICE[0][1])
-print("Office:  ", dataForExcelWriter.ListDKF_WIN_OFFICE[0][2])
+rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(MAINEXCELPATHNAME)
+rowObjects[0].showRowObject()
+rowObjects[6].showRowObject()
+print("Number of rows with bad DKF:  ", len(rowsWithBadDKF))
+print()
 
-# Write data as excel file in dir (TestyPyKsiegowosc)
+finalList = ListWithDKF_winVersion_officeVersion(MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL)
+finalList.makeList("90408")
+print("Row from final list: ", finalList.ListDKF_WIN_OFFICE[0])
+print("DKF:  ", finalList.ListDKF_WIN_OFFICE[0][0])
+print("Win:  ", finalList.ListDKF_WIN_OFFICE[0][1])
+print("Office:  ", finalList.ListDKF_WIN_OFFICE[0][2])
 ToExcel = ExcelWriter()
-ToExcel.makeExcel(dataForExcelWriter.makeList("90408"))
+ToExcel.makeExcel(finalList.ListDKF_WIN_OFFICE[0])
+

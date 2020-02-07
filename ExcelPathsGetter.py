@@ -1,7 +1,13 @@
 import glob
 
-excelPaths = []
-# path to mapped disk
-mappedDisk = "//kmsrv01/OCR/EXCEL/OUTPUT/*.xls"
-for filename in glob.glob(mappedDisk):
-    excelPaths.append(filename)
+
+class FilesInDir:
+    excelPaths = []
+
+    def __init__(self, DIRWITHPDFCHANGEDTOEXCEL):
+        for filename in glob.glob(DIRWITHPDFCHANGEDTOEXCEL):
+            self.excelPaths.append(filename)
+        print("Excel files founded in dir")
+
+    def getFilesPaths(self):
+        return self.excelPaths
