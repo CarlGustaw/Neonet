@@ -25,6 +25,7 @@ class RowMaker:
                 listOfObjects.append(RowRecord(dataSheet.row_slice(rowNumber)[3].value, dataSheet.row_slice(rowNumber)[8].value))
 
         print("Rows as objects add successfully", " Number of readed rows: ", dataSheet.nrows - 1)
+        print("Number of rows with good DKF:  ", len(listOfObjects))
         print("Number of rows with bad DKF:  ", len(rowsWithBadDKF))
         print()
         return listOfObjects, rowsWithBadDKF

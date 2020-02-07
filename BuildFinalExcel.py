@@ -7,6 +7,7 @@ class BuildFinalExcel:
     DIRWITHPDFCHANGEDTOEXCEL = ""
     FinalListMaker = ""
     finalListDKF_WIN_OFFICE = []
+    uniqueList = []
 
     def __init__(self, MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL):
         self.MAINEXCELPATHNAME = MAINEXCELPATHNAME
@@ -21,7 +22,14 @@ class BuildFinalExcel:
         for correctDKF in rowObjects:
             self.finalListDKF_WIN_OFFICE.append(self.FinalListMaker.makeList(correctDKF.getID_DKF()))
 
+        self.uniqueList = []
+        for row in self.finalListDKF_WIN_OFFICE:
+            if row not in self.uniqueList:
+                self.uniqueList.append(row)
+
+        print("Number of final rows: ", len(self.uniqueList))
+
     def showFinalList(self):
-        print("Final List:  ", self.finalListDKF_WIN_OFFICE)
+        print("Final List:  ", self.uniqueList)
 
 
