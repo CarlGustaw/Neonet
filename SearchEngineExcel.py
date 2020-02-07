@@ -14,8 +14,14 @@ class SearchEngineExcel:
         "W10": "Windows 10",
         "W10P": "Windows 10 Pro"
     }
+    officeDict = {
+        "O_2007": "Office 2007",
+        "O_2010": "Office 2010",
+        "O_2013": "Office 2013",
+        "O_2016": "Office 2016"
+    }
 
-    ERRORMESSAGE = "Nie udalo sie odczytac wersji"
+    ERRORMESSAGE = "Nie udalo sie odczytac wersj"
 
     def __init__(self, excelPathName):
         self.excelPathName = excelPathName
@@ -28,7 +34,16 @@ class SearchEngineExcel:
             for cell in self.dataSheet.row_slice(rowNumber):
                 # Searching for office version
                 if str(cell.value).find('Office') != -1:
-                    self.officeVersion = cell.value[str(cell.value).find("Office"):str(cell.value).find("Office") + 30]
+                    if str(cell.value).find('2007') != -1:
+                        self.officeVersion = self.officeDict.get("O_2007")
+                    elif str(cell.value).find('2010') != -1:
+                        self.officeVersion = self.officeDict.get("O_2010")
+                    elif str(cell.value).find('2013') != -1:
+                        self.officeVersion = self.officeDict.get("O_2013")
+                    elif str(cell.value).find('2016') != -1:
+                        self.officeVersion = self.officeDict.get("O_2016")
+                    else:
+                        self.officeVersion = cell.value[str(cell.value).find("Office"):str(cell.value).find("Office") + 30]
 
                 # Searching for windows version
                 if str(cell.value).find('Windows') != -1 or str(cell.value).find('Win') != -1 or str(cell.value).find(
