@@ -5,7 +5,9 @@ class SearchEngineExcel:
     excelPathName = ""
     dataSheet = ""
     officeVersion = ""
+    numberOfOffices = 0
     winVersion = ""
+    numberOfWindows = 0
     winDict = {
         "WXP": "Windows XP",
         "WXPP": "Windows XP Pro",
@@ -39,15 +41,18 @@ class SearchEngineExcel:
                 cellStringValue = str.lower(str(cell.value))
                 # Searching for office version
                 if cellStringValue.find('office') != -1:
-                    if cellStringValue.find(' szt') != -1:
-                        print("FOUND \"szt\" in the same line How many of \"szt\":  ",
-                              str(cellStringValue)[str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find("szt") + 3])
-                        print(cellStringValue)
+                    if cellStringValue.find('szt') != -1:
+                        valueOfszt = str(cellStringValue)[str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find("szt") + 3]
+                        valueOfszt = list(valueOfszt)
+                        if valueOfszt[0] == "i":
+                            valueOfszt[0] = 1
+                        print("FOUND \"szt\" in the same line How many of \"szt\":  ", valueOfszt[0])
 
                     for minicell in self.dataSheet.row_slice(rowNumber - 2):
                         if str.lower(str(minicell.value)).find(" szt") != -1:
-                            print("FOUND \"szt\" in previous line       ", minicell, " How many of \"szt\":  ",
-                                  str(minicell)[str(minicell).find("szt") - 2: str(minicell).find("szt") + 3])
+                            valueOfszt = str(minicell)[str(minicell).find("szt") - 2: str(minicell).find("szt") + 3]
+                            valueOfszt = list(valueOfszt)
+                            print("FOUND \"szt\" in previous line  How many of \"szt\":  ", valueOfszt[0])
                     if cellStringValue.find('2007') != -1:
                         self.officeVersion = self.officeDict.get("O_2007")
                         break

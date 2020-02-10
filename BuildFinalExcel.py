@@ -24,8 +24,8 @@ class BuildFinalExcel:
         for excelPath in excelPaths:
             for correctDKF in rowObjects:
                 if excelPath.find(correctDKF.getID_DKF()) != -1:
-                    print("Correct path found   ", correctDKF.getID_DKF(), "    ", excelPath)
                     print()
+                    print("Correct path found   ", correctDKF.getID_DKF(), "    ", excelPath)
                     self.FinalListMaker.addFoundPattern(correctDKF.getID_DKF(), excelPath)
         self.finalListDKF_WIN_OFFICE = self.FinalListMaker.getActualList()
 
