@@ -9,6 +9,6 @@ builder = BuildFinalExcel(MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL)
 builder.build()
 builder.showFinalList()
 
-ToExcel = ExcelWriter()
-ToExcel.makeExcel(builder.getFinalUniqueList())
+#ToExcel = ExcelWriter()
+#ToExcel.makeExcel(builder.getFinalUniqueList())
 

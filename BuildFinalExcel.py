@@ -22,16 +22,10 @@ class BuildFinalExcel:
         for correctDKF in rowObjects:
             self.finalListDKF_WIN_OFFICE.append(self.FinalListMaker.makeList(correctDKF.getID_DKF()))
 
-        self.uniqueList = []
-        for row in self.finalListDKF_WIN_OFFICE:
-            if row not in self.uniqueList:
-                self.uniqueList.append(row)
-
     def showFinalList(self):
-        flattened = [val for sublist in self.uniqueList for val in sublist]
-        print("Final List:  ",  flattened)
+        flattened = [val for sublist in self.finalListDKF_WIN_OFFICE for val in sublist]
+        print("Final List:  ", flattened)
 
     def getFinalUniqueList(self):
-        flattened = [val for sublist in self.uniqueList for val in sublist]
+        flattened = [val for sublist in self.finalListDKF_WIN_OFFICE for val in sublist]
         return flattened
-

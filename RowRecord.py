@@ -1,15 +1,11 @@
 class RowRecord:
     idDKF = ""
-    name = ""
-    winType = ""
-    officeType = ""
 
-    def __init__(self, name, idDKF):
-        self.name = name
+    def __init__(self, idDKF):
         self.idDKF = idDKF
 
     def showRowObject(self):
-        print("Nazwa", self.name, " ", "ID-DKF: ", self.idDKF)
+        print("ID-DKF: ", self.idDKF)
 
     def getID_DKF(self):
         return self.idDKF

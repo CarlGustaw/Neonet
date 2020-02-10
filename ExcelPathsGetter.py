@@ -7,7 +7,8 @@ class FilesInDir:
     def __init__(self, DIRWITHPDFCHANGEDTOEXCEL):
         for filename in glob.glob(DIRWITHPDFCHANGEDTOEXCEL):
             self.excelPaths.append(filename)
-        print("Excel files founded in dir")
+        numberOfReadedFiles = len(self.excelPaths)
+        print(numberOfReadedFiles, "Excel files founded in dir")
         self.showPath()
 
     def getFilesPaths(self):
