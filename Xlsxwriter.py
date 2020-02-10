@@ -6,6 +6,8 @@ class ExcelWriter:
     id_DKF = ""
     winVersion = ""
     officeVersion = ""
+    numberOfOffices = 0
+    numberOfWindows = 0
     pathToWriteExcel = 'C:/Users/dMichalczak/TestyPyKsiegowosc/KsiegowoscTest.xlsx'
 
     def createWorkBook(self):
@@ -32,11 +34,14 @@ class ExcelWriter:
             self.id_DKF = element[0]
             self.winVersion = element[1]
             self.officeVersion = element[2]
+            self.numberOfOffices = element[3]
+            self.numberOfWindows = element[4]
 
             # Iterate over the data and write it out row by row.
             worksheet.write(row, col, self.id_DKF)
             worksheet.write(row, col + 1, self.winVersion)
             worksheet.write(row, col + 2, self.officeVersion)
+            worksheet.write(row, col + 3, self.numberOfOffices)
+            worksheet.write(row, col + 4, self.numberOfWindows)
             row += 1
-
         self.workbook.close()

@@ -8,14 +8,15 @@ class ListWithDKF_winVersion_officeVersion:
         print("Creating ExcelReader")
 
     def addFoundPattern(self, id_DKF, excelPath):
-        winVersion, officeVersion = self.getPatternsFromSearchEngine(excelPath)
-        self.ListDKF_WIN_OFFICE.insert(len(self.ListDKF_WIN_OFFICE), [id_DKF, winVersion, officeVersion])
+        winVersion, officeVersion, numberOfOffices, numberOfWindows = self.getPatternsFromSearchEngine(excelPath)
+        self.ListDKF_WIN_OFFICE.insert(len(self.ListDKF_WIN_OFFICE),
+                                       [id_DKF, winVersion, officeVersion, numberOfOffices, numberOfWindows])
 
     @staticmethod
     def getPatternsFromSearchEngine(excelPath):
         SearchEngine = SearchEngineExcel(excelPath)
-        winVersion, officeVersion = SearchEngine.ScanFileForPatterns()
-        return winVersion, officeVersion
+        winVersion, officeVersion, numberOfOffices, numberOfWindows = SearchEngine.ScanFileForPatterns()
+        return winVersion, officeVersion, numberOfOffices, numberOfWindows
 
     def getActualList(self):
         return self.ListDKF_WIN_OFFICE
