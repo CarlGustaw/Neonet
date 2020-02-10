@@ -35,7 +35,7 @@ class SearchEngineExcel:
 
     patternsForIndexError = ["i", "I", "j", "J", "|", "L", "f", "F", "£"]
 
-    ERRORMESSAGE = "Nie udalo sie odczytac wersji"
+    ERROR_MESSAGE = "Nie udalo sie odczytac wersji"
 
     def __init__(self, excelPathName):
         self.excelPathName = excelPathName
@@ -47,6 +47,7 @@ class SearchEngineExcel:
         for rowNumber in range(0, self.dataSheet.nrows - 1):
             for cell in self.dataSheet.row_slice(rowNumber):
                 cellStringValue = str.lower(str(cell.value))
+
                 # Searching for office version
                 if cellStringValue.find('office') != -1:
                     if cellStringValue.find('szt') != -1:
@@ -92,7 +93,7 @@ class SearchEngineExcel:
                         self.officeVersion = cell.value[
                                              cellStringValue.find("office"):cellStringValue.find("office") + 30]
 
-                # Searching for windows version
+                # Searching  for windows version
                 self.searchEngineForWindows(cellStringValue, rowNumber)
 
         self.ifNoVersionFoundSetErrorMessage()
@@ -100,31 +101,38 @@ class SearchEngineExcel:
         return self.winVersion, self.officeVersion, self.numberOfOffices, self.numberOfWindows
 
     def searchEngineForWindows(self, cellStringValue, currentRowNumber):
+
+        # Searching if in line is any trace of word windows or vista (some excels don't read pdfs correctly)
         if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
                 'vis') != -1 or cellStringValue.find('vb') != -1:
             self.searchForQuantityInTwoRowsHigherOrSameLine("SameLine", currentRowNumber, cellStringValue, "Win")
             self.searchForQuantityInTwoRowsHigherOrSameLine("NotTheSameLine", currentRowNumber, cellStringValue, "Win")
 
-            self.searchForWindows(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
-            self.searchForWindows(cellStringValue, self.patternsForWinVista, "WVP", "WV")
-            self.searchForWindows(cellStringValue, self.patternsForWin7, "W7P", "W7")
-            self.searchForWindows(cellStringValue, self.patternsForWin8, "W8P", "W8")
-            self.searchForWindows(cellStringValue, self.patternsForWin10, "W10P", "W10")
+            self.searchForWindowsIn(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
+            self.searchForWindowsIn(cellStringValue, self.patternsForWinVista, "WVP", "WV")
+            self.searchForWindowsIn(cellStringValue, self.patternsForWin7, "W7P", "W7")
+            self.searchForWindowsIn(cellStringValue, self.patternsForWin8, "W8P", "W8")
+            self.searchForWindowsIn(cellStringValue, self.patternsForWin10, "W10P", "W10")
 
     def searchForQuantityInTwoRowsHigherOrSameLine(self, setWhichLine, currentRowNumber, cellStringValue, WinOrOffice):
+        # Search for quantity in two lines above current row
         if setWhichLine != "SameLine":
             for cell in self.dataSheet.row_slice(currentRowNumber - 2):
                 cellsLowerStringValue = str.lower(str(cell.value))
-                self.searchForQuantityMark(cellsLowerStringValue, WinOrOffice)
+                self.searchForQuantityMarkAndCheckingForAnyErrorInIndex(cellsLowerStringValue, WinOrOffice)
         else:
-            self.searchForQuantityMark(cellStringValue, WinOrOffice)
+            # Search for quantity in the same line
+            self.searchForQuantityMarkAndCheckingForAnyErrorInIndex(cellStringValue, WinOrOffice)
 
-    def searchForQuantityMark(self, searchedCell, WinOrOffice):
+    # If mark for quantity was found, is gonna be write down as list of characters
+    def searchForQuantityMarkAndCheckingForAnyErrorInIndex(self, searchedCell, WinOrOffice):
         if searchedCell.find('szt') != -1:
             valueOfQuantity = self.setValueOfQuantity(searchedCell)
             valueOfQuantity = self.changeTypeOfValueOfQuantityToList(valueOfQuantity)
+            # Any wrongly read quantity is gonna fixed, by switching first index to one
             self.ifIndexErrorOccursChangeItToOne(searchedCell, self.patternsForIndexError, valueOfQuantity, WinOrOffice)
 
+    # Return the reading frame with quantity number in it
     def setValueOfQuantity(self, cell):
         return str(cell)[str(cell).find("szt") - 2: str(cell).find("szt") + 3]
 
@@ -132,37 +140,41 @@ class SearchEngineExcel:
         valueOfQuantity = list(valueOfQuantity)
         return valueOfQuantity
 
-    def ifIndexErrorOccursChangeItToOne(self, cellStringValue, patternsForIndexError, valueOfQuantity, WinOrOffice):
+    def ifIndexErrorOccursChangeItToOneAndSetQuantities(self, cellStringValue, patternsForIndexError, valueOfQuantity,
+                                                        WinOrOffice):
         try:
             for pattern in patternsForIndexError:
                 if pattern == valueOfQuantity[0]:
                     valueOfQuantity[0] = 1
-                    if WinOrOffice == "Win":
-                        self.numberOfWindows = int(valueOfQuantity[0])
-                        print("Found Windows \"szt\". How many of \"szt\":  ", self.numberOfWindows)
-                    else:
-                        self.numberOfOffices = int(valueOfQuantity[0])
-                        print("Found Office \"szt\". How many of \"szt\":  ", self.numberOfOffices)
+                    self.setQuantitiesForWindowsOrOffice(WinOrOffice, valueOfQuantity)
         except IndexError:
             print("List index out of range, showing whole cell value:   ", cellStringValue)
 
+    def setQuantitiesForWindowsOrOffice(self, WinOrOffice, valueOfQuantity):
+        if WinOrOffice == "Win":
+            self.numberOfWindows = int(valueOfQuantity[0])
+            print("Found Windows \"szt\". How many of \"szt\":  ", self.numberOfWindows)
+        else:
+            self.numberOfOffices = int(valueOfQuantity[0])
+            print("Found Office \"szt\". How many of \"szt\":  ", self.numberOfOffices)
+
     # Method take as cell value as argument, specify pattern list to search and two dictionary links to version type.
-    def searchForWindows(self, cellStringValue, patternList, dictLinkIfPro, dictLinkIfNotPro):
+    def searchForWindowsIn(self, cellStringValue, patternList, dictLinkIfPro, dictLinkIfNotPro):
         for pattern in patternList:
             if cellStringValue.find(pattern):
-                self.searchIfVersionIsProfessional(cellStringValue, dictLinkIfPro, dictLinkIfNotPro)
+                self.searchIfVersionIsProfessionalOrNot(cellStringValue, dictLinkIfPro, dictLinkIfNotPro)
 
-    def searchIfVersionIsProfessional(self, cellStringValue, dictLinkIfPro, dictLinkIfNotPro):
-        if cellStringValue.find('pro') != -1:
+    def searchIfVersionIsProfessionalOrNot(self, cellStringValue, dictLinkIfPro, dictLinkIfNotPro):
+        if cellStringValue.find('pro') != -1 or cellStringValue.find('p') != -1:
             self.winVersion = self.winDict.get(dictLinkIfPro)
         else:
             self.winVersion = self.winDict.get(dictLinkIfNotPro)
 
     def ifNoVersionFoundSetErrorMessage(self):
         if self.winVersion == "":
-            self.winVersion = self.ERRORMESSAGE
+            self.winVersion = self.ERROR_MESSAGE
         if self.officeVersion == "":
-            self.officeVersion = self.ERRORMESSAGE
+            self.officeVersion = self.ERROR_MESSAGE
 
     def showInformationFoundAboutWindowsAndOfficeVersion(self):
         print("From SearchEngine: Office version: ", self.officeVersion, "   Windows Version:  ", self.winVersion)
