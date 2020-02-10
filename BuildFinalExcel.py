@@ -27,9 +27,11 @@ class BuildFinalExcel:
             if row not in self.uniqueList:
                 self.uniqueList.append(row)
 
-        print("Number of final rows: ", len(self.uniqueList))
-
     def showFinalList(self):
-        print("Final List:  ", self.uniqueList)
+        flattened = [val for sublist in self.uniqueList for val in sublist]
+        print("Final List:  ",  flattened)
 
+    def getFinalUniqueList(self):
+        flattened = [val for sublist in self.uniqueList for val in sublist]
+        return flattened
 

@@ -9,6 +9,6 @@ builder = BuildFinalExcel(MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL)
 builder.build()
 builder.showFinalList()
 
-#ToExcel = ExcelWriter()
-#ToExcel.makeExcel(finalList.ListDKF_WIN_OFFICE[0])
+ToExcel = ExcelWriter()
+ToExcel.makeExcel(builder.getFinalUniqueList())
 
