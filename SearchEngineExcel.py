@@ -57,7 +57,7 @@ class SearchEngineExcel:
 
                 # Searching for windows version
                 if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
-                        'w') != -1:
+                        'w') != -1 or cellStringValue.find('vis') != -1:
                     if cellStringValue.find('wxp') != -1 or cellStringValue.find('winxp') != -1 or cellStringValue.find(
                             'windows xp') != -1 or str(cell.value).find('win xp') != -1:
                         if cellStringValue.find('pro') != -1:
