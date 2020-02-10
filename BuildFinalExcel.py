@@ -25,10 +25,12 @@ class BuildFinalExcel:
             for correctDKF in rowObjects:
                 if excelPath.find(correctDKF.getID_DKF()) != -1:
                     print("Correct path found   ", correctDKF.getID_DKF(), "    ", excelPath)
+                    print()
                     self.FinalListMaker.addFoundPattern(correctDKF.getID_DKF(), excelPath)
         self.finalListDKF_WIN_OFFICE = self.FinalListMaker.getActualList()
 
     def showFinalList(self):
+        print()
         print("Final List:  ", self.finalListDKF_WIN_OFFICE)
 
     def getFinalUniqueList(self):

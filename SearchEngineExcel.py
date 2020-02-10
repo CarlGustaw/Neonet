@@ -69,7 +69,6 @@ class SearchEngineExcel:
                     if cellStringValue.find('wv') != -1 or cellStringValue.find('winv') != -1 or cellStringValue.find(
                             'windows vista') != -1 or cellStringValue.find('win v') != -1 or cellStringValue.find(
                         'vis') != -1:
-                        print("Wartość cell:    ", cell.value)
                         if cellStringValue.find('Pro') != -1:
                             self.winVersion = self.winDict.get("WVP")
                             break
