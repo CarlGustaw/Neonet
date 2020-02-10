@@ -46,19 +46,30 @@ class SearchEngineExcel:
                                      str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find(
                                          "szt") + 3]
                         valueOfszt = list(valueOfszt)
-                        if valueOfszt[0] == "i":
-                            valueOfszt[0] = 1
-                        self.numberOfOffices = int(valueOfszt[0])
-                        print("FOUND OFFICE \"szt\" in the same line How many of \"szt\":  ", self.numberOfOffices)
+                        try:
+                            if valueOfszt[0] == "i" or valueOfszt[0] == "I" or valueOfszt[0] == "|" or valueOfszt[0] == "j" or valueOfszt[0] == "f" or valueOfszt[
+                                0] == "L":
+                                valueOfszt[0] = 1
+                                self.numberOfOffices = int(valueOfszt[0])
+                                print("FOUND OFFICE \"szt\" in the same line How many of \"szt\":  ",
+                                      self.numberOfOffices)
+                        except:
+                            print("IndexError: list index out of range", cellStringValue)
 
                     for minicell in self.dataSheet.row_slice(rowNumber - 2):
                         if str.lower(str(minicell.value)).find(" szt") != -1:
                             valueOfszt = str(minicell)[str(minicell).find("szt") - 2: str(minicell).find("szt") + 3]
                             valueOfszt = list(valueOfszt)
-                            if valueOfszt[0] == "i":
-                                valueOfszt[0] = 1
-                            self.numberOfOffices = int(valueOfszt[0])
-                            print("FOUND OFFICE \"szt\" in previous line  How many of \"szt\":  ", int(valueOfszt[0]))
+                            try:
+                                if valueOfszt[0] == "i" or valueOfszt[0] == "I" or valueOfszt[0] == "|" or valueOfszt[0] == "j" or valueOfszt[0] == "f" or valueOfszt[
+                                    0] == "L":
+                                    valueOfszt[0] = 1
+                                    self.numberOfOffices = int(valueOfszt[0])
+                                    print("FOUND OFFICE \"szt\" in previous line  How many of \"szt\":  ",
+                                          int(valueOfszt[0]))
+                            except:
+                                print("IndexError: list index out of range", cellStringValue)
+
                     if cellStringValue.find('2007') != -1:
                         self.officeVersion = self.officeDict.get("O_2007")
                     elif cellStringValue.find('2010') != -1:
@@ -79,19 +90,26 @@ class SearchEngineExcel:
                                      str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find(
                                          "szt") + 3]
                         valueOfszt = list(valueOfszt)
-                        if valueOfszt[0] == "i":
-                            valueOfszt[0] = 1
-                        self.numberOfWindows = int(valueOfszt[0])
-                        print("FOUND WIN \"szt\" in the same line How many of \"szt\":  ", self.numberOfWindows)
+                        try:
+                            if valueOfszt[0] == "i" or valueOfszt[0] == "j" or valueOfszt[0] == "|" or valueOfszt[0] == "£":
+                                valueOfszt[0] = 1
+                            self.numberOfWindows = int(valueOfszt[0])
+                            print("FOUND WIN \"szt\" in the same line How many of \"szt\":  ", self.numberOfWindows)
+                        except:
+                            print("IndexError: list index out of range", cellStringValue)
                     for minicell in self.dataSheet.row_slice(rowNumber - 2):
                         if str.lower(str(minicell.value)).find(" szt") != -1:
                             valueOfszt = str(minicell)[str(minicell).find("szt") - 2: str(minicell).find("szt") + 3]
                             valueOfszt = list(valueOfszt)
-                            if valueOfszt[0] == "i" or valueOfszt[0] == "I" or valueOfszt[0] == "f":
-                                valueOfszt[0] = 1
-                            self.numberOfWindows = int(valueOfszt[0])
-                            print("FOUND WIN \"szt\" in previous line  How many of \"szt\":  ",
-                                  self.numberOfWindows)
+                            try:
+                                if valueOfszt[0] == "i" or valueOfszt[0] == "I" or valueOfszt[0] == "f" or valueOfszt[
+                                    0] == "L":
+                                    valueOfszt[0] = 1
+                                self.numberOfWindows = int(valueOfszt[0])
+                                print("FOUND WIN \"szt\" in previous line  How many of \"szt\":  ",
+                                      self.numberOfWindows)
+                            except:
+                                print("IndexError: list index out of range", cellStringValue)
                     if cellStringValue.find('wxp') != -1 or cellStringValue.find('winxp') != -1 or cellStringValue.find(
                             'windows xp') != -1 or str(cell.value).find('win xp') != -1:
                         if cellStringValue.find('pro') != -1:
