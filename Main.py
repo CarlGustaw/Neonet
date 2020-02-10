@@ -7,8 +7,8 @@ DIRWITHPDFCHANGEDTOEXCEL = "//kmsrv01/OCR/EXCEL/OUTPUT/*.xls"
 
 builder = BuildFinalExcel(MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL)
 builder.build()
-#builder.showFinalList()
+builder.showFinalList()
 
-#ToExcel = ExcelWriter()
-#ToExcel.makeExcel(builder.getFinalUniqueList())
+ToExcel = ExcelWriter()
+ToExcel.makeExcel(builder.getFinalUniqueList())
 

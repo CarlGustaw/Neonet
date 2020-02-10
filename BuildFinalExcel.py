@@ -13,6 +13,7 @@ class BuildFinalExcel:
     def __init__(self, MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL):
         self.MAINEXCELPATHNAME = MAINEXCELPATHNAME
         self.DIRWITHPDFCHANGEDTOEXCEL = DIRWITHPDFCHANGEDTOEXCEL
+        self.FinalListMaker = ListWithDKF_winVersion_officeVersion()
         print("Builder finished")
 
     def build(self):
@@ -20,19 +21,15 @@ class BuildFinalExcel:
         rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(self.MAINEXCELPATHNAME)
 
         excelPaths = FilesInDir(self.DIRWITHPDFCHANGEDTOEXCEL).getFilesPaths()
-
         for excelPath in excelPaths:
             for correctDKF in rowObjects:
-                if excelPath.find("90409") != -1 and correctDKF.getID_DKF() == "90409":
-                    print("Dkf: ", correctDKF.getID_DKF(), " path:", excelPath)
-        # self.FinalListMaker = ListWithDKF_winVersion_officeVersion(self.DIRWITHPDFCHANGEDTOEXCEL)
-        # for correctDKF in rowObjects:
-        # self.finalListDKF_WIN_OFFICE.append(self.FinalListMaker.makeList(correctDKF.getID_DKF()))
+                if excelPath.find(correctDKF.getID_DKF()) != -1:
+                    print("Correct path found   ", correctDKF.getID_DKF(), "    ", excelPath)
+                    self.FinalListMaker.addFoundPattern(correctDKF.getID_DKF(), excelPath)
+        self.finalListDKF_WIN_OFFICE = self.FinalListMaker.getActualList()
 
     def showFinalList(self):
-        flattened = [val for sublist in self.finalListDKF_WIN_OFFICE for val in sublist]
-        print("Final List:  ", flattened)
+        print("Final List:  ", self.finalListDKF_WIN_OFFICE)
 
     def getFinalUniqueList(self):
-        flattened = [val for sublist in self.finalListDKF_WIN_OFFICE for val in sublist]
-        return flattened
+        return self.finalListDKF_WIN_OFFICE

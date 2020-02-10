@@ -18,6 +18,7 @@ class ExcelWriter:
         return worksheet
 
     def makeExcel(self, listAsSheet):
+        print("Number of elements in listAsSheet:   ", len(listAsSheet))
         # Create a workbook and add a worksheet.
         worksheet = self.createWorkSheet()
 
