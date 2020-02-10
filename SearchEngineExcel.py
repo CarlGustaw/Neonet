@@ -39,6 +39,15 @@ class SearchEngineExcel:
                 cellStringValue = str.lower(str(cell.value))
                 # Searching for office version
                 if cellStringValue.find('office') != -1:
+                    if cellStringValue.find(' szt') != -1:
+                        print("FOUND \"szt\" in the same line How many of \"szt\":  ",
+                              str(cellStringValue)[str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find("szt") + 3])
+                        print(cellStringValue)
+
+                    for minicell in self.dataSheet.row_slice(rowNumber - 2):
+                        if str.lower(str(minicell.value)).find(" szt") != -1:
+                            print("FOUND \"szt\" in previous line       ", minicell, " How many of \"szt\":  ",
+                                  str(minicell)[str(minicell).find("szt") - 2: str(minicell).find("szt") + 3])
                     if cellStringValue.find('2007') != -1:
                         self.officeVersion = self.officeDict.get("O_2007")
                         break
