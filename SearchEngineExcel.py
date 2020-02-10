@@ -93,55 +93,56 @@ class SearchEngineExcel:
                                              cellStringValue.find("office"):cellStringValue.find("office") + 30]
 
                 # Searching for windows version
-                if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
-                        'vis') != -1 or cellStringValue.find('vb') != -1:
-                    if cellStringValue.find('szt') != -1:
-                        valueOfszt = str(cellStringValue)[
-                                     str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find(
-                                         "szt") + 3]
-                        valueOfszt = list(valueOfszt)
-                        try:
-                            if valueOfszt[0] == "i" or valueOfszt[0] == "j" or valueOfszt[0] == "|" or valueOfszt[
-                                0] == "£":
-                                valueOfszt[0] = 1
-                            self.numberOfWindows = int(valueOfszt[0])
-                            print("FOUND WIN \"szt\" in the same line How many of \"szt\":  ", self.numberOfWindows)
-                        except:
-                            print("IndexError: list index out of range", cellStringValue)
-
-                    self.searchForQuantityInTwoRowsHigher(self.dataSheet, rowNumber, cellStringValue)
-
-                    self.searchForWindows(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
-                    self.searchForWindows(cellStringValue, self.patternsForWinVista, "WVP", "WV")
-                    self.searchForWindows(cellStringValue, self.patternsForWin7, "W7P", "W7")
-                    self.searchForWindows(cellStringValue, self.patternsForWin8, "W8P", "W8")
-                    self.searchForWindows(cellStringValue, self.patternsForWin10, "W10P", "W10")
+                self.searchEngineForWindows(cellStringValue, rowNumber)
 
         self.ifNoVersionFoundSetErrorMessage()
         self.showInformationFoundAboutWindowsAndOfficeVersion()
         return self.winVersion, self.officeVersion, self.numberOfOffices, self.numberOfWindows
 
-    def searchForQuantityInTwoRowsHigher(self, dataSheet, rowNumber, cellStringValue):
-        for earlierCells in self.dataSheet.row_slice(rowNumber - 2):
-            if str.lower(str(earlierCells.value)).find(" szt") != -1:
-                valueOfQuantity = self.setValueOfQuantity(earlierCells)
-                valueOfQuantity = self.changeTypeOfValueOfQuantityToList(valueOfQuantity)
-                self.ifIndexErrorOccursChangeItToOne(cellStringValue, self.patternsForIndexError, valueOfQuantity)
+    def searchEngineForWindows(self, cellStringValue, currentRowNumber):
+        if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
+                'vis') != -1 or cellStringValue.find('vb') != -1:
+            self.searchForQuantityInTwoRowsHigherOrSameLine("SameLine", currentRowNumber, cellStringValue, "Win")
+            self.searchForQuantityInTwoRowsHigherOrSameLine("NotTheSameLine", currentRowNumber, cellStringValue, "Win")
 
-    def setValueOfQuantity(self, earlierCells):
-        return str(earlierCells)[str(earlierCells).find("szt") - 2: str(earlierCells).find("szt") + 3]
+            self.searchForWindows(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
+            self.searchForWindows(cellStringValue, self.patternsForWinVista, "WVP", "WV")
+            self.searchForWindows(cellStringValue, self.patternsForWin7, "W7P", "W7")
+            self.searchForWindows(cellStringValue, self.patternsForWin8, "W8P", "W8")
+            self.searchForWindows(cellStringValue, self.patternsForWin10, "W10P", "W10")
+
+    def searchForQuantityInTwoRowsHigherOrSameLine(self, setWhichLine, currentRowNumber, cellStringValue, WinOrOffice):
+        if setWhichLine != "SameLine":
+            for cell in self.dataSheet.row_slice(currentRowNumber - 2):
+                cellsLowerStringValue = str.lower(str(cell.value))
+                self.searchForQuantityMark(cellsLowerStringValue, WinOrOffice)
+        else:
+            self.searchForQuantityMark(cellStringValue, WinOrOffice)
+
+    def searchForQuantityMark(self, searchedCell, WinOrOffice):
+        if searchedCell.find('szt') != -1:
+            valueOfQuantity = self.setValueOfQuantity(searchedCell)
+            valueOfQuantity = self.changeTypeOfValueOfQuantityToList(valueOfQuantity)
+            self.ifIndexErrorOccursChangeItToOne(searchedCell, self.patternsForIndexError, valueOfQuantity, WinOrOffice)
+
+    def setValueOfQuantity(self, cell):
+        return str(cell)[str(cell).find("szt") - 2: str(cell).find("szt") + 3]
 
     def changeTypeOfValueOfQuantityToList(self, valueOfQuantity):
         valueOfQuantity = list(valueOfQuantity)
         return valueOfQuantity
 
-    def ifIndexErrorOccursChangeItToOne(self, cellStringValue, patternsForIndexError, valueOfQuantity):
+    def ifIndexErrorOccursChangeItToOne(self, cellStringValue, patternsForIndexError, valueOfQuantity, WinOrOffice):
         try:
             for pattern in patternsForIndexError:
                 if pattern == valueOfQuantity[0]:
                     valueOfQuantity[0] = 1
-                    self.numberOfWindows = int(valueOfQuantity[0])
-                    print("FOUND WIN \"szt\" in previous line  How many of \"szt\":  ", self.numberOfWindows)
+                    if WinOrOffice == "Win":
+                        self.numberOfWindows = int(valueOfQuantity[0])
+                        print("Found Windows \"szt\". How many of \"szt\":  ", self.numberOfWindows)
+                    else:
+                        self.numberOfOffices = int(valueOfQuantity[0])
+                        print("Found Office \"szt\". How many of \"szt\":  ", self.numberOfOffices)
         except IndexError:
             print("List index out of range, showing whole cell value:   ", cellStringValue)
 
