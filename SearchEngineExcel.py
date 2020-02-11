@@ -52,7 +52,9 @@ class SearchEngineExcel:
                 cellStringValue = str.lower(str(cell.value))
 
                 # Searching for office version and writing down whole rows
-                if cellStringValue.find('office') != -1 and cellStringValue.find("officejet") == -1 and cellStringValue.find("officepower") == -1:
+                if cellStringValue.find('off') != -1 and cellStringValue.find(
+                        "officejet") == -1 and cellStringValue.find("officepower") == -1 or cellStringValue.find(
+                        'otllce') != -1:
                     listRowsOfficeValue.append(self.dataSheet.row_slice(rowNumber))
 
                     self.searchForPatternIn(cellStringValue, self.patternsForOffice, "", "")
@@ -105,7 +107,7 @@ class SearchEngineExcel:
                     break
 
     def searchIfVersionIsProfessionalOrNot(self, cellStringValue, dictLinkIfPro, dictLinkIfNotPro):
-        if cellStringValue.find('pro') != -1 or cellStringValue.find('p') != -1 and cellStringValue.find('prod') == -1:
+        if cellStringValue.find('pro') != -1 and cellStringValue.find('prod') == -1:
             self.winVersion = self.winDict.get(dictLinkIfPro)
         else:
             self.winVersion = self.winDict.get(dictLinkIfNotPro)
