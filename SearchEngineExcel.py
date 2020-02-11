@@ -48,16 +48,15 @@ class SearchEngineExcel:
 
     def ScanFileForPatterns(self):
         print("Scan for patterns")
-        rowOfficeValue = []
-        rowWindowsValue = []
+        listRowsOfficeValue = []
+        listRowWindowsValue = []
         for rowNumber in range(0, self.dataSheet.nrows - 1):
             for cell in self.dataSheet.row_slice(rowNumber):
                 cellStringValue = str.lower(str(cell.value))
 
                 # Searching for office version
                 if cellStringValue.find('office') != -1:
-                    rowOfficeValue.append(self.dataSheet.row_slice(rowNumber))
-                    print("ROW VALUE OFFICE:::: ", rowOfficeValue)
+                    listRowsOfficeValue.append(self.dataSheet.row_slice(rowNumber))
                     if cellStringValue.find('szt') != -1:
                         valueOfszt = str(cellStringValue)[
                                      str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find(
@@ -90,23 +89,24 @@ class SearchEngineExcel:
                                 print("IndexError: list index out of range", cellStringValue)
 
                     # Searching for office version
-                    self.searchForPatternIn(cellStringValue, self.patternsForOffice, "", "")
+                if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
+                        'vis') != -1 or cellStringValue.find('vb') != -1 or cellStringValue.find("WlO") != -1:
+                    listRowWindowsValue.append(self.dataSheet.row_slice(rowNumber))
+
+                self.searchForPatternIn(cellStringValue, self.patternsForOffice, "", "")
 
                 # Searching  for windows version
-                self.searchEngineForWindows(cellStringValue, rowNumber, rowWindowsValue)
+                listRowWindowsValue.append(self.searchEngineForWindows(cellStringValue, rowNumber))
 
         self.ifNoVersionFoundSetErrorMessage()
         self.showInformationFoundAboutWindowsAndOfficeVersion()
-        return self.winVersion, self.officeVersion, self.numberOfOffices, self.numberOfWindows
+        return self.winVersion, self.officeVersion, self.numberOfOffices, self.numberOfWindows, listRowWindowsValue, listRowsOfficeValue
 
-    def searchEngineForWindows(self, cellStringValue, currentRowNumber, rowWindowsValue):
+    def searchEngineForWindows(self, cellStringValue, currentRowNumber):
 
         # Searching if in line is any trace of word windows or vista (some excels don't read pdfs correctly)
         if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
-                'vis') != -1 or cellStringValue.find('vb') != -1:
-
-            rowWindowsValue.append(self.dataSheet.row_slice(currentRowNumber))
-            print("ROW VALUE WINDOWS:::: ", rowWindowsValue)
+                'vis') != -1 or cellStringValue.find('vb') != -1 or cellStringValue.find("WlO") != -1:
 
             self.searchForQuantityInTwoRowsHigherOrSameLine("SameLine", currentRowNumber, cellStringValue, "Win")
             self.searchForQuantityInTwoRowsHigherOrSameLine("NotTheSameLine", currentRowNumber, cellStringValue, "Win")
@@ -140,7 +140,8 @@ class SearchEngineExcel:
             valueOfQuantity = self.setValueOfQuantity(searchedCell)
             valueOfQuantity = self.changeTypeOfValueOfQuantityToList(valueOfQuantity)
             # Any wrongly read quantity is gonna fixed, by switching first index to one
-            self.ifIndexErrorOccursChangeItToOneAndSetQuantities(searchedCell, self.patternsForIndexError, valueOfQuantity, WinOrOffice)
+            self.ifIndexErrorOccursChangeItToOneAndSetQuantities(searchedCell, self.patternsForIndexError,
+                                                                 valueOfQuantity, WinOrOffice)
 
     # Return the reading frame with quantity number in it
     def setValueOfQuantity(self, cell):
