@@ -2,8 +2,7 @@ from BuildFinalExcel import BuildFinalExcel
 from Xlsxwriter import ExcelWriter
 
 MAINEXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
-EXCELPATHNAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/90408.xls"
-DIRWITHPDFCHANGEDTOEXCEL = "//kmsrv01/OCR/EXCEL/OUTPUT/*.xls"
+DIRWITHPDFCHANGEDTOEXCEL = "C:/Users/dMichalczak/TestyPyKsiegowosc/Pdf_to_Excel/*.xls"
 
 builder = BuildFinalExcel(MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL)
 builder.build()

@@ -2,6 +2,7 @@ import ExcelReader
 
 
 class SearchEngineExcel:
+    patternWindowsFound = False
     excelPathName = ""
     dataSheet = ""
     officeVersion = ""
@@ -17,21 +18,24 @@ class SearchEngineExcel:
         "W7P": "Windows 7 Pro",
         "W8": "Windows 8",
         "W8P": "Windows 8",
-        "W10": "Windows 10",
-        "W10P": "Windows 10 Pro"
+        "W10": "Windows 10 Home",
+        "W10P": "Windows 10 Pro",
+        "Weird": "Weird"
     }
     officeDict = {
-        "O_2007": "Office 2007",
-        "O_2010": "Office 2010",
-        "O_2013": "Office 2013",
-        "O_2016": "Office 2016"
+        "2007": "Office 2007",
+        "2010": "Office 2010",
+        "2013": "Office 2013",
+        "2016": "Office 2016"
     }
 
+    patternsWeirdAndUncommon = ["xp prg+win"]
+    patternsForOffice = ["2007", "2010", "2013", "2016"]
     patternsForWinXP = ["windows xp", "wxp", 'winxp', 'win xp', "xp"]
-    patternsForWinVista = ["windows vista", "wv", "winvista", "win vista", "vis", "vista", "winv"]
+    patternsForWinVista = ["windows vista", "wv", "winvista", "win vista", "vis", "vista", "winv", "vistabusiness"]
     patternsForWin7 = ["windows 7", "w7", 'win7', 'win 7']
     patternsForWin8 = ["windows 8", "w8", 'win8', 'win 8']
-    patternsForWin10 = ["windows 10", "w10", 'win10', 'win 10']
+    patternsForWin10 = ["windows 10", "w10", "win10", "win 10", "win1"]
 
     patternsForIndexError = ["i", "I", "j", "J", "|", "L", "f", "F", "£"]
 
@@ -44,12 +48,16 @@ class SearchEngineExcel:
 
     def ScanFileForPatterns(self):
         print("Scan for patterns")
+        rowOfficeValue = []
+        rowWindowsValue = []
         for rowNumber in range(0, self.dataSheet.nrows - 1):
             for cell in self.dataSheet.row_slice(rowNumber):
                 cellStringValue = str.lower(str(cell.value))
 
                 # Searching for office version
                 if cellStringValue.find('office') != -1:
+                    rowOfficeValue.append(self.dataSheet.row_slice(rowNumber))
+                    print("ROW VALUE OFFICE:::: ", rowOfficeValue)
                     if cellStringValue.find('szt') != -1:
                         valueOfszt = str(cellStringValue)[
                                      str.lower(str(cell.value)).find("szt") - 2: str.lower(str(cell.value)).find(
@@ -81,38 +89,40 @@ class SearchEngineExcel:
                             except:
                                 print("IndexError: list index out of range", cellStringValue)
 
-                    if cellStringValue.find('2007') != -1:
-                        self.officeVersion = self.officeDict.get("O_2007")
-                    elif cellStringValue.find('2010') != -1:
-                        self.officeVersion = self.officeDict.get("O_2010")
-                    elif cellStringValue.find('2013') != -1:
-                        self.officeVersion = self.officeDict.get("O_2013")
-                    elif cellStringValue.find('2016') != -1:
-                        self.officeVersion = self.officeDict.get("O_2016")
-                    else:
-                        self.officeVersion = cell.value[
-                                             cellStringValue.find("office"):cellStringValue.find("office") + 30]
+                    # Searching for office version
+                    self.searchForPatternIn(cellStringValue, self.patternsForOffice, "", "")
 
                 # Searching  for windows version
-                self.searchEngineForWindows(cellStringValue, rowNumber)
+                self.searchEngineForWindows(cellStringValue, rowNumber, rowWindowsValue)
 
         self.ifNoVersionFoundSetErrorMessage()
         self.showInformationFoundAboutWindowsAndOfficeVersion()
         return self.winVersion, self.officeVersion, self.numberOfOffices, self.numberOfWindows
 
-    def searchEngineForWindows(self, cellStringValue, currentRowNumber):
+    def searchEngineForWindows(self, cellStringValue, currentRowNumber, rowWindowsValue):
 
         # Searching if in line is any trace of word windows or vista (some excels don't read pdfs correctly)
         if cellStringValue.find('windows') != -1 or cellStringValue.find('win') != -1 or cellStringValue.find(
                 'vis') != -1 or cellStringValue.find('vb') != -1:
+
+            rowWindowsValue.append(self.dataSheet.row_slice(currentRowNumber))
+            print("ROW VALUE WINDOWS:::: ", rowWindowsValue)
+
             self.searchForQuantityInTwoRowsHigherOrSameLine("SameLine", currentRowNumber, cellStringValue, "Win")
             self.searchForQuantityInTwoRowsHigherOrSameLine("NotTheSameLine", currentRowNumber, cellStringValue, "Win")
-
-            self.searchForWindowsIn(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
-            self.searchForWindowsIn(cellStringValue, self.patternsForWinVista, "WVP", "WV")
-            self.searchForWindowsIn(cellStringValue, self.patternsForWin7, "W7P", "W7")
-            self.searchForWindowsIn(cellStringValue, self.patternsForWin8, "W8P", "W8")
-            self.searchForWindowsIn(cellStringValue, self.patternsForWin10, "W10P", "W10")
+            print("Windows found state:  ", self.patternWindowsFound)
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsWeirdAndUncommon, "Weird", "")
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsForWinXP, "WXPP", "WXP")
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsForWinVista, "WVP", "WV")
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsForWin7, "W7P", "W7")
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsForWin8, "W8P", "W8")
+            if self.patternWindowsFound == False:
+                self.searchForPatternIn(cellStringValue, self.patternsForWin10, "W10P", "W10")
 
     def searchForQuantityInTwoRowsHigherOrSameLine(self, setWhichLine, currentRowNumber, cellStringValue, WinOrOffice):
         # Search for quantity in two lines above current row
@@ -130,7 +140,7 @@ class SearchEngineExcel:
             valueOfQuantity = self.setValueOfQuantity(searchedCell)
             valueOfQuantity = self.changeTypeOfValueOfQuantityToList(valueOfQuantity)
             # Any wrongly read quantity is gonna fixed, by switching first index to one
-            self.ifIndexErrorOccursChangeItToOne(searchedCell, self.patternsForIndexError, valueOfQuantity, WinOrOffice)
+            self.ifIndexErrorOccursChangeItToOneAndSetQuantities(searchedCell, self.patternsForIndexError, valueOfQuantity, WinOrOffice)
 
     # Return the reading frame with quantity number in it
     def setValueOfQuantity(self, cell):
@@ -159,13 +169,34 @@ class SearchEngineExcel:
             print("Found Office \"szt\". How many of \"szt\":  ", self.numberOfOffices)
 
     # Method take as cell value as argument, specify pattern list to search and two dictionary links to version type.
-    def searchForWindowsIn(self, cellStringValue, patternList, dictLinkIfPro, dictLinkIfNotPro):
-        for pattern in patternList:
-            if cellStringValue.find(pattern):
-                self.searchIfVersionIsProfessionalOrNot(cellStringValue, dictLinkIfPro, dictLinkIfNotPro)
+    def searchForPatternIn(self, cellStringValue, patternList, dictLinkIfPro, dictLinkIfNotPro):
+
+        if dictLinkIfPro == "Weird" and dictLinkIfNotPro == "":
+            for pattern in patternList:
+                if cellStringValue.find(pattern) != -1:
+                    self.patternWindowsFound = True
+                    self.winVersion = pattern
+        # If no dictionary link was provided, turn on module for search Office version
+        elif dictLinkIfPro == "" and dictLinkIfNotPro == "":
+            for pattern in patternList:
+                if cellStringValue.find(pattern) != -1:
+                    self.officeVersion = self.officeDict.get(pattern)
+                else:
+                    self.officeVersion = cellStringValue
+        else:
+            # If dictionary link was provided, turn on module for search Windows version
+            for pattern in patternList:
+                if cellStringValue.find(pattern) != -1:
+                    self.patternWindowsFound = True
+                    print("Wartość:  ", cellStringValue)
+                    self.searchIfVersionIsProfessionalOrNot(cellStringValue, dictLinkIfPro, dictLinkIfNotPro)
+                    print("Pattern found :  ", pattern)
+                    break
+                else:
+                    self.winVersion = cellStringValue
 
     def searchIfVersionIsProfessionalOrNot(self, cellStringValue, dictLinkIfPro, dictLinkIfNotPro):
-        if cellStringValue.find('pro') != -1 or cellStringValue.find('p') != -1:
+        if cellStringValue.find('pro') != -1 or cellStringValue.find('p') != -1 and cellStringValue.find('prod') == -1:
             self.winVersion = self.winDict.get(dictLinkIfPro)
         else:
             self.winVersion = self.winDict.get(dictLinkIfNotPro)
