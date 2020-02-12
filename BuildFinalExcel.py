@@ -5,20 +5,26 @@ from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVe
 
 class BuildFinalExcel:
     MAINEXCELPATHNAME = ""
+    index_of_dkf_column = 0
+    index_row_scan = 0
     DIRWITHPDFCHANGEDTOEXCEL = ""
     FinalListMaker = ""
     finalListDKF_WIN_OFFICE = []
     uniqueList = []
 
-    def __init__(self, MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL):
+    def __init__(self, MAINEXCELPATHNAME, index_of_dkf_column, index_row_scan, DIRWITHPDFCHANGEDTOEXCEL):
         self.MAINEXCELPATHNAME = MAINEXCELPATHNAME
+        self.index_of_dkf_column = index_of_dkf_column
+        self.index_row_scan = index_row_scan
         self.DIRWITHPDFCHANGEDTOEXCEL = DIRWITHPDFCHANGEDTOEXCEL
         self.FinalListMaker = ListWithDKF_winVersion_officeVersion()
         print("Builder finished")
 
     def build(self):
         print("Building final excel")
-        rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(self.MAINEXCELPATHNAME)
+        rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(self.MAINEXCELPATHNAME,
+                                                                                  self.index_of_dkf_column,
+                                                                                  self.index_row_scan)
 
         excelPaths = FilesInDir(self.DIRWITHPDFCHANGEDTOEXCEL).getFilesPaths()
         for excelPath in excelPaths:
