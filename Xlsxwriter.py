@@ -8,21 +8,20 @@ class ExcelWriter:
     officeVersion = ""
     listRowsWindows = []
     listRowsOffice = []
-    pathToWriteExcel = 'C:/Users/dMichalczak/TestyPyKsiegowosc/KsiegowoscTest.xlsx'
 
-    def createWorkBook(self):
-        self.workbook = xlsxwriter.Workbook(self.pathToWriteExcel)
+    def createWorkBook(self, new_excel_path):
+        self.workbook = xlsxwriter.Workbook(new_excel_path)
         return self.workbook
 
-    def createWorkSheet(self):
-        self.workbook = self.createWorkBook()
+    def createWorkSheet(self, new_excel_path):
+        self.workbook = self.createWorkBook(new_excel_path)
         worksheet = self.workbook.add_worksheet()
         return worksheet
 
-    def makeExcel(self, listAsSheet):
+    def makeExcel(self, listAsSheet, new_excel_path):
         print("Number of elements in listAsSheet:   ", len(listAsSheet))
         # Create a workbook and add a worksheet.
-        worksheet = self.createWorkSheet()
+        worksheet = self.createWorkSheet(new_excel_path)
 
         # Start from the first cell. Rows and columns are zero indexed.
         row = 0
