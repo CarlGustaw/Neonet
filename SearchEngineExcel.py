@@ -27,14 +27,14 @@ class SearchEngineExcel:
         "2016": "Office 2016"
     }
 
-    patterns_for_windows = ["windows", "win", "vis", "vb", "wlo", "w7", "w8", "w10", "wxp"]
+    patterns_for_windows = ["windows", "win", "vis", "vb", "wlo", "w7", "w8", "w10", "wxp", "winlo", "w|o", "winlopro"]
     patterns_to_avoid = ["wr", "wy", "wys", "wa", "wie", "wn", "wh", "wa"]
     patterns_for_office = ["2007", "2010", "2013", "2016"]
     patterns_for_win_xp = ["windows xp", "wxp", 'winxp', 'win xp', "xp"]
     patterns_for_win_vista = ["windows vista", "wv", "winvista", "win vista", "vis", "vista", "winv", "vistabusiness"]
     patterns_for_win_7 = ["windows 7", "w7", "win7", "win 7", "w7p"]
     patterns_for_win_8 = ["windows 8", "w8", 'win8', 'win 8']
-    patterns_for_win_10 = ["windows 10", "w10", "win10", "win 10", "win1"]
+    patterns_for_win_10 = ["windows 10", "w10", "win10", "win 10", "win1", "win|", "winlo", "w|o", "winlopro"]
 
     patterns_for_index_error = ["i", "I", "j", "J", "|", "L", "f", "F", "£"]
 
@@ -79,8 +79,9 @@ class SearchEngineExcel:
                 or cell_string_value.find('win') != -1
                 or cell_string_value.find('vis') != -1
                 or cell_string_value.find('vb') != -1
-                or cell_string_value.find("WlO") != -1
-                or cell_string_value.find("w") != -1):
+                or cell_string_value.find("wlO") != -1
+                or cell_string_value.find("w|o") != -1
+                or cell_string_value.find("winlo") != -1):
 
             if self.pattern_windows_found == False:
                 self.search_for_pattern_in(cell_string_value, self.patterns_for_win_xp, "WXPP", "WXP")
