@@ -16,11 +16,11 @@ from Xlsxwriter import ExcelWriter
     # Dir_with_Pdf_to_excel(NEO24): "C:/Users/dMichalczak/TestyPyKsiegowosc/Pdf_to_excel_NEO24/*.xls"
     # Path to new excel file: "C:/Users/dMichalczak/TestyPyKsiegowosc/Ksiegowosc_test_Neonet.xlsx"
 
-main_excel_path_name = "C:/Users/dMichalczak/TestyPyKsiegowosc/NEO24_Main.xls"
-dir_with_pdf_changed_to_excel = "C:/Users/dMichalczak/TestyPyKsiegowosc/Pdf_to_excel_NEO24/*.xls"
-new_excel_path = "C:/Users/dMichalczak/TestyPyKsiegowosc/Ksiegowosc_test_NEO24.xlsx"
-index_of_dkf_column = 7
-index_row_scan = 2
+main_excel_path_name = "C:/Users/dMichalczak/TestyPyKsiegowosc/NEONET_Main.xlsx"
+dir_with_pdf_changed_to_excel = "C:/Users/dMichalczak/TestyPyKsiegowosc/Pdf_to_Excel_NEONET/*.xls"
+new_excel_path = "C:/Users/dMichalczak/TestyPyKsiegowosc/Ksiegowosc_test_Neonet.xlsx"
+index_of_dkf_column = 8
+index_row_scan = 1
 
 builder = BuildFinalExcel(main_excel_path_name, index_of_dkf_column, index_row_scan, dir_with_pdf_changed_to_excel)
 builder.build()
