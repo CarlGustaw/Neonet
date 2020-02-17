@@ -1,11 +1,11 @@
 class RowRecord:
-    idDKF = ""
+    id_dkf = ""
 
-    def __init__(self, idDKF):
-        self.idDKF = idDKF
+    def __init__(self, id_dkf):
+        self.id_dkf = id_dkf
 
-    def showRowObject(self):
-        print("ID-DKF: ", self.idDKF)
+    def show_row_object(self):
+        print("ID-DKF: ", self.id_dkf)
 
-    def getID_DKF(self):
-        return self.idDKF
+    def get_id_dkf(self):
+        return self.id_dkf

@@ -1,37 +1,37 @@
 from RowToObjects import RowMaker
 from ExcelPathsGetter import FilesInDir
-from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVersion
+from DkfWinVersionOfficeVersionList import DkfWinVersionOfficeVersionList
 
 
 class BuildFinalExcel:
-    MAINEXCELPATHNAME = ""
-    DIRWITHPDFCHANGEDTOEXCEL = ""
-    FinalListMaker = ""
-    finalListDKF_WIN_OFFICE = []
-    uniqueList = []
+    main_excel_pathname = ""
+    dir_pdf_changed_to_excel = ""
+    DkfWinOfficeMaker = ""
+    dkf_win_office_list = []
+    unique_elements_list = []
 
-    def __init__(self, MAINEXCELPATHNAME, DIRWITHPDFCHANGEDTOEXCEL):
-        self.MAINEXCELPATHNAME = MAINEXCELPATHNAME
-        self.DIRWITHPDFCHANGEDTOEXCEL = DIRWITHPDFCHANGEDTOEXCEL
-        self.FinalListMaker = ListWithDKF_winVersion_officeVersion()
+    def __init__(self, main_excel_pathname, dir_pdf_changed_to_excel):
+        self.main_excel_pathname = main_excel_pathname
+        self.dir_pdf_changed_to_excel = dir_pdf_changed_to_excel
+        self.DkfWinOfficeMaker = DkfWinVersionOfficeVersionList()
         print("Builder finished")
 
     def build(self):
         print("Building final excel")
-        rowObjects, rowsWithBadDKF = RowMaker.readExcelFileToSheetAndMakingObject(self.MAINEXCELPATHNAME)
+        row_objects, rows_with_bad_dkf = RowMaker.read_excel_file_to_sheet_and_making_object(self.main_excel_pathname)
 
-        excelPaths = FilesInDir(self.DIRWITHPDFCHANGEDTOEXCEL).getFilesPaths()
-        for excelPath in excelPaths:
-            for correctDKF in rowObjects:
-                if excelPath.find(correctDKF.getID_DKF()) != -1:
+        excel_paths = FilesInDir(self.dir_pdf_changed_to_excel).get_files_paths()
+        for excel_path in excel_paths:
+            for correct_dkf in row_objects:
+                if excel_path.find(correct_dkf.get_id_dkf()) != -1:
                     print()
-                    print("Correct path found   ", correctDKF.getID_DKF(), "    ", excelPath)
-                    self.FinalListMaker.addFoundPattern(correctDKF.getID_DKF(), excelPath)
-        self.finalListDKF_WIN_OFFICE = self.FinalListMaker.getActualList()
+                    print("Correct path found   ", correct_dkf.get_id_dkf(), "    ", excel_path)
+                    self.DkfWinOfficeMaker.add_found_pattern(correct_dkf.get_id_dkf(), excel_path)
+        self.dkf_win_office_list = self.DkfWinOfficeMaker.get_actual_list()
 
-    def showFinalList(self):
+    def show_dkfs_wins_offices_list(self):
         print()
-        print("Final List:  ", self.finalListDKF_WIN_OFFICE)
+        print("Final List:  ", self.dkf_win_office_list)
 
-    def getFinalUniqueList(self):
-        return self.finalListDKF_WIN_OFFICE
+    def get_final_unique_elements_list(self):
+        return self.dkf_win_office_list

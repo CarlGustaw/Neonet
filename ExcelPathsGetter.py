@@ -2,18 +2,18 @@ import glob
 
 
 class FilesInDir:
-    excelPaths = []
+    excel_paths = []
 
-    def __init__(self, DIRWITHPDFCHANGEDTOEXCEL):
-        for filename in glob.glob(DIRWITHPDFCHANGEDTOEXCEL):
-            self.excelPaths.append(filename)
-        numberOfReadedFiles = len(self.excelPaths)
-        print(numberOfReadedFiles, "Excel files founded in dir")
-        self.showPath()
+    def __init__(self, DIR_WITH_PDF_CHANGED_TO_EXCEL):
+        for filename in glob.glob(DIR_WITH_PDF_CHANGED_TO_EXCEL):
+            self.excel_paths.append(filename)
+        number_of_read_files = len(self.excel_paths)
+        print(number_of_read_files, "Excel files founded in dir")
+        self.show_path()
 
-    def getFilesPaths(self):
-        return self.excelPaths
+    def get_files_paths(self):
+        return self.excel_paths
 
-    def showPath(self):
-        for path in self.excelPaths:
+    def show_path(self):
+        for path in self.excel_paths:
             print(path)

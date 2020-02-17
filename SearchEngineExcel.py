@@ -42,9 +42,9 @@ class SearchEngineExcel:
 
     def __init__(self, excelPathName):
         self.excel_path_name = excelPathName
-        self.data_sheet = ExcelReader.readExcelFile(self.excel_path_name)
+        self.data_sheet = ExcelReader.read_excel_file(self.excel_path_name)
 
-    def ScanFileForPatterns(self):
+    def scan_file_for_patterns(self):
         list_rows_office_value = []
         list_row_windows_value = []
         for row_number in range(0, self.data_sheet.nrows - 1):
