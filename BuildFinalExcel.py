@@ -1,37 +1,32 @@
 from RowToObjects import RowMaker
 from ExcelPathsGetter import FilesInDir
-from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVersion
+from Dkf_Pattern_List import Dkf_Pattern_List
 
 
 class BuildFinalExcel:
-    MAINEXCELPATHNAME = ""
-    DIRWITHPDFCHANGEDTOEXCEL = ""
-    FinalListMaker = ""
-    finalListDKF_WIN_OFFICE = []
-    uniqueList = []
 
-    def __init__(self, main_excel_pathname, dir_pdf_changed_to_excel):
+    def __init__(self, main_excel_pathname, dir_pdf_changed_to_excel, column_index_of_dkf, pattern_config_file):
         self.main_excel_pathname = main_excel_pathname
         self.dir_pdf_changed_to_excel = dir_pdf_changed_to_excel
-        self.DkfWinOfficeMaker = DkfWinVersionOfficeVersionList()
-        print("Builder finished")
+        self.column_index_of_dkf = column_index_of_dkf
+        self.DkfWinOfficeMaker = Dkf_Pattern_List(pattern_config_file)
+        self.row_maker = RowMaker(self.main_excel_pathname, self.column_index_of_dkf)
+        self.row_objects = self.__make_row_objects()
+        print("Row transformed into objects")
+        self.excel_paths = FilesInDir(self.dir_pdf_changed_to_excel).get_files_paths()
+        print("Read pdfs changed into excel files")
 
-    def build(self):
-        print("Building final excel")
-        row_objects, rows_with_bad_dkf = RowMaker.read_excel_file_to_sheet_and_making_object(self.main_excel_pathname)
+    def __make_row_objects(self):
+        return self.row_maker.make_object()
 
-        excel_paths = FilesInDir(self.dir_pdf_changed_to_excel).get_files_paths()
-        for excel_path in excel_paths:
-            for correct_dkf in row_objects:
-                if excel_path.find(correct_dkf.get_id_dkf()) != -1:
-                    print()
-                    print("Correct path found   ", correct_dkf.get_id_dkf(), "    ", excel_path)
-                    self.DkfWinOfficeMaker.add_found_pattern(correct_dkf.get_id_dkf(), excel_path)
-        self.dkf_win_office_list = self.DkfWinOfficeMaker.get_actual_list()
+    def check_patterns_only_when_corresponding_pdf_to_excel_file_occur(self):
+        for excel_path in self.excel_paths:
+            for row_object in self.row_objects:
 
-    def show_dkfs_wins_offices_list(self):
-        print()
-        print("Final List:  ", self.dkf_win_office_list)
+                # Search for excel with corresponding dkf name
+                if excel_path.find(row_object.get_dkf()) != -1:
+                    print("Correct path found   ", row_object.get_dkf(), "    ", excel_path)
+                    self.DkfWinOfficeMaker.add_found_pattern(row_object.get_dkf(), excel_path)
 
-    def get_final_unique_elements_list(self):
-        return self.dkf_win_office_list
+    def get_dkfs_patterns_list(self):
+        return self.DkfWinOfficeMaker.get_actual_list()

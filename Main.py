@@ -1,13 +1,22 @@
 from BuildFinalExcel import BuildFinalExcel
 from Xlsxwriter import ExcelWriter
+import configparser
 
-MAIN_EXCEL_PATH_NAME = "C:/Users/dMichalczak/TestyPyKsiegowosc/DoTestow.xlsx"
-DIR_WITH_PDF_CHANGED_TO_EXCEL = "C:/Users/dMichalczak/TestyPyKsiegowosc/Pdf_to_Excel/*.xls"
+# Read config file
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-builder = BuildFinalExcel(MAIN_EXCEL_PATH_NAME, DIR_WITH_PDF_CHANGED_TO_EXCEL)
-builder.build()
-builder.show_dkfs_wins_offices_list()
+# Write down values from config file
+MAIN_EXCEL_PATH_NAME = config['INPUT']['MAIN_EXCEL_PATH_NAME']
+DIR_WITH_PDF_CHANGED_TO_EXCEL = config['INPUT']['DIR_WITH_PDF_CHANGED_TO_EXCEL']
+column_index_of_dkf = int(config['INPUT']['column_index_of_dkf'])
+path_to_write_excel = config['OUTPUT']['path_to_write_excel']
+pattern_config_file = config['PATTERNS']['pattern_config_file']
 
-ToExcel = ExcelWriter()
-ToExcel.make_excel(builder.get_final_unique_elements_list())
+# Search for patterns in excel files according to dkfs
+builder = BuildFinalExcel(MAIN_EXCEL_PATH_NAME, DIR_WITH_PDF_CHANGED_TO_EXCEL, column_index_of_dkf, pattern_config_file)
+builder.check_patterns_only_when_corresponding_pdf_to_excel_file_occur()
 
+# Write down all founded patterns with dkf as new excel file
+ToExcel = ExcelWriter(path_to_write_excel)
+ToExcel.make_excel(builder.get_dkfs_patterns_list())

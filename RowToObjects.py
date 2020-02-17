@@ -3,28 +3,20 @@ from RowRecord import RowRecord
 
 
 class RowMaker:
-    data_sheet = ""
 
-    @staticmethod
-    def read_excel_file_to_sheet_and_making_object(main_excel_path_name):
-        dataSheet = ExcelReader.read_excel_file(main_excel_path_name)
+    def __init__(self, main_excel_pathname, column_index_of_dkf):
+        self.main_excel_pathname = main_excel_pathname
+        self.column_index_of_dkf = column_index_of_dkf
+        self.data_sheet = ExcelReader.read_excel_file(self.main_excel_pathname)
         print("Main excel read successfully")
-        list_of_objects = []
-        rows_with_bad_dkf = []
+        self.list_of_objects = []
 
-        for row_number in range(1, dataSheet.nrows - 1):
-            # Check if row contain correct DKF
-            if str(dataSheet.row_slice(row_number)[8].value).find("+") != -1 or \
-                    dataSheet.row_slice(row_number)[8].value == "" or \
-                    dataSheet.row_slice(row_number)[8].value == "brak skanu" or \
-                    dataSheet.row_slice(row_number)[8].value == "FS-01WW/00032360/2014 - ZŚW 799/2014" or \
-                    dataSheet.row_slice(row_number)[8].value == "ID:379199":
-                rows_with_bad_dkf.append(row_number)
-            else:
-                list_of_objects.append(RowRecord(str(int(dataSheet.row_slice(row_number)[8].value))))
+    def make_object(self):
+        for row_number in range(1, self.data_sheet.nrows - 1):
+            self.list_of_objects.append(
+                RowRecord(str(self.data_sheet.row_slice(row_number)[self.column_index_of_dkf].value)))
 
-        print("Rows as objects add successfully", " Number of readed rows: ", dataSheet.nrows - 1)
-        print("Number of rows with good DKF:  ", len(list_of_objects))
-        print("Number of rows with bad DKF:  ", len(rows_with_bad_dkf))
+        print("Rows as objects add successfully", " Number of read rows: ", self.data_sheet.nrows - 1)
+        print("Number of rows with good DKF:  ", len(self.list_of_objects))
         print()
-        return list_of_objects, rows_with_bad_dkf
+        return self.list_of_objects

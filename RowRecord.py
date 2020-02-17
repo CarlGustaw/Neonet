@@ -7,5 +7,5 @@ class RowRecord:
     def show_row_object(self):
         print("ID-DKF: ", self.id_dkf)
 
-    def get_id_dkf(self):
+    def get_dkf(self):
         return self.id_dkf
