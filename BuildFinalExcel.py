@@ -1,14 +1,14 @@
 from RowToObjects import RowMaker
 from ExcelPathsGetter import FilesInDir
-from DkfWinVersionOfficeVersionList import DkfWinVersionOfficeVersionList
+from ListWithDKF_winVersion_officeVersion import ListWithDKF_winVersion_officeVersion
 
 
 class BuildFinalExcel:
-    main_excel_pathname = ""
-    dir_pdf_changed_to_excel = ""
-    DkfWinOfficeMaker = ""
-    dkf_win_office_list = []
-    unique_elements_list = []
+    MAINEXCELPATHNAME = ""
+    DIRWITHPDFCHANGEDTOEXCEL = ""
+    FinalListMaker = ""
+    finalListDKF_WIN_OFFICE = []
+    uniqueList = []
 
     def __init__(self, main_excel_pathname, dir_pdf_changed_to_excel):
         self.main_excel_pathname = main_excel_pathname
