@@ -22,3 +22,5 @@ builder.check_patterns_only_when_corresponding_pdf_to_excel_file_occur()
 # Write down all founded patterns with dkf as new excel file
 ToExcel = ExcelWriter(path_to_write_excel)
 ToExcel.make_excel(builder.get_dkfs_patterns_list())
+
+# Daniel Michalczak 18.02.2020
