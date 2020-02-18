@@ -12,10 +12,9 @@ class SearchEngineExcel:
 
     def scan_file_for_patterns(self):
         for row_number in range(0, self.data_sheet.nrows):
-            for pattern in self.pattern_config_file:
-                for cell in self.data_sheet.row_slice(row_number):
+            for cell in self.data_sheet.row_slice(row_number):
+                for pattern in self.pattern_config_file:
                     cell_string_value = str.lower(str(cell.value))
-
                     # Add cell as element in to the list if pattern was found
                     if cell_string_value.find(pattern) != -1:
                         self.list_rows_with_patterns.append(cell_string_value)
